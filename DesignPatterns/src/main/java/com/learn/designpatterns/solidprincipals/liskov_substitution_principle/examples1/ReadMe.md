@@ -1,4 +1,4 @@
-Let's consider an example using Java to illustrate the Liskov Substitution Principle.
+Certainly! Let's consider an example using Java to illustrate the Liskov Substitution Principle.
 
 Suppose we have a class hierarchy for shapes:
 

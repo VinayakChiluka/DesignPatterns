@@ -1,42 +1,105 @@
-Here's an example that demonstrates a violation of the Liskov Substitution Principle:
+Certainly, here are a couple more examples of violations of the Liskov Substitution Principle along with potential fixes:
 
-Suppose we have a class hierarchy for birds:
+**Violation 1:**
+
+Suppose we have a class hierarchy for vehicles:
 
 ```java
-class Bird {
-    void fly() {
-        System.out.println("Bird is flying");
+class Vehicle {
+    void startEngine() {
+        System.out.println("Starting engine");
     }
 }
 
-class Penguin extends Bird {
+class ElectricCar extends Vehicle {
     @Override
-    void fly() {
-        throw new UnsupportedOperationException("Penguins can't fly");
+    void startEngine() {
+        System.out.println("Starting electric car");
     }
 }
 ```
 
-In this example, the `Bird` class has a `fly` method, and the `Penguin` class is a subclass that overrides the `fly` method to indicate that penguins can't fly.
+In this example, the `ElectricCar` class overrides the `startEngine` method to reflect the fact that electric cars don't have traditional engines.
 
-Now let's consider the following code that demonstrates a violation of the Liskov Substitution Principle:
+**Violation:**
 
 ```java
 public class Main {
-    static void makeBirdFly(Bird bird) {
-        bird.fly();
+    static void operateVehicle(Vehicle vehicle) {
+        vehicle.startEngine();
     }
 
     public static void main(String[] args) {
-        Bird bird = new Bird();
-        Bird penguin = new Penguin();
+        Vehicle vehicle = new Vehicle();
+        Vehicle electricCar = new ElectricCar();
 
-        makeBirdFly(bird);     // Output: Bird is flying
-        makeBirdFly(penguin);  // Throws UnsupportedOperationException
+        operateVehicle(vehicle);     // Output: Starting engine
+        operateVehicle(electricCar);  // Output: Starting electric car
     }
 }
 ```
 
-In this example, even though `Penguin` is a subclass of `Bird`, it violates the Liskov Substitution Principle because it introduces an unexpected behavior. When we try to make a penguin fly, it throws an exception because penguins cannot fly. This violates the expectation that a subclass should be able to replace its superclass without altering the correctness of the program.
+**Fix:**
 
-In this case, the introduction of an exception behavior in the subclass that is not part of the superclass's behavior leads to a violation of the Liskov Substitution Principle.
+To adhere to the Liskov Substitution Principle, we should ensure that subclasses don't introduce new behaviors that contradict the expected behavior of the superclass. In this case, the `ElectricCar` subclass should not be introducing a method that starts the engine, but rather a method that starts the electric motor. We could rename the method in the subclass:
+
+```java
+class ElectricCar extends Vehicle {
+    void startElectricMotor() {
+        System.out.println("Starting electric motor");
+    }
+}
+```
+
+**Violation 2:**
+
+Suppose we have a class hierarchy for employees:
+
+```java
+class Employee {
+    void work() {
+        System.out.println("Employee is working");
+    }
+}
+
+class Manager extends Employee {
+    @Override
+    void work() {
+        System.out.println("Manager is delegating work");
+    }
+}
+```
+
+In this example, the `Manager` class overrides the `work` method to reflect the fact that managers delegate work rather than directly performing tasks.
+
+**Violation:**
+
+```java
+public class Main {
+    static void assignWork(Employee employee) {
+        employee.work();
+    }
+
+    public static void main(String[] args) {
+        Employee employee = new Employee();
+        Employee manager = new Manager();
+
+        assignWork(employee);  // Output: Employee is working
+        assignWork(manager);   // Output: Manager is delegating work
+    }
+}
+```
+
+**Fix:**
+
+To adhere to the Liskov Substitution Principle, we should ensure that subclasses don't introduce behaviors that weaken the guarantees of the superclass. In this case, the `Manager` subclass's behavior should not deviate significantly from the `Employee` superclass's behavior. A better approach might be to introduce a separate method for delegation:
+
+```java
+class Manager extends Employee {
+    void delegateWork() {
+        System.out.println("Manager is delegating work");
+    }
+}
+```
+
+By using this approach, we preserve the core behavior of the `work` method while also introducing the new behavior specific to managers without violating the principle.
