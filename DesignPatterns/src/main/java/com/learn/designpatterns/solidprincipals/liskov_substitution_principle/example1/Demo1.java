@@ -1,4 +1,4 @@
-package com.learn.designpatterns.solidprincipals.liskov_substitution_principle.examples1;
+package com.learn.designpatterns.solidprincipals.liskov_substitution_principle.example1;
 
 interface Shape{
     void draw();

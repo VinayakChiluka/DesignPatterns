@@ -1,4 +1,4 @@
-package com.learn.designpatterns.solidprincipals.liskov_substitution_principle.examples2;
+package com.learn.designpatterns.solidprincipals.liskov_substitution_principle.example2;
 
 class Vehicle {
     void startEngine() {
